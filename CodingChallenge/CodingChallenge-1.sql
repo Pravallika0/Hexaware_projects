@@ -1,4 +1,4 @@
----q.1//Provide a SQL script that initializes the database for the Job Board scenario ìCareerHubî. 
+---q.1//Provide a SQL script that initializes the database for the Job Board scenario ‚ÄúCareerHub‚Äù. 
 ---q.4//Ensure the script handles potential errors, such as if the database or tables already exist.
 
 if not exists (select * from sys.databases where name =  'CareerHub') 
@@ -98,7 +98,11 @@ where j.Salary between 50000 and 80000
 
 ---q.7//Write an SQL query that retrieves the job application history for a specific applicant. Allow a
 --------parameter for the ApplicantID, and return a result set with the job titles, company names, and
---------application dates for all the jobs the applicant has applied to.select j.JobTitle,c.CompanyName,a.ApplicationDatefrom Applicants ap join Applications a on ap.ApplicantID= a.ApplicantID
+--------application dates for all the jobs the applicant has applied to.
+
+select j.JobTitle,c.CompanyName,a.ApplicationDate
+from Applicants ap 
+join Applications a on ap.ApplicantID= a.ApplicantID
 join Jobs j on a.JobID=j.JobID
 join Companies c on j.CompanyID=c.CompanyID
 where FirstName = 'Pravi'
@@ -129,7 +133,12 @@ where job_lists=(select max(job_lists) from job_counts);
 
 
 ---q.10//Find the applicants who have applied for positions in companies located in 'CityX' and have at
----least 3 years of experience.alter table Applicantsadd Experience int;update Applicants
+---least 3 years of experience.
+
+alter table Applicants
+add Experience int;
+
+update Applicants
 set Experience = 2
 where ApplicantID = 1;
 
@@ -148,7 +157,10 @@ where ApplicantID = 4;
 update Applicants
 set Experience = 5
 where ApplicantID = 5;
-select * from Applicantswith position as (
+
+select * from Applicants
+
+with position as (
 select j.JobTitle, a.ApplicantID
 from Applications a
 join Jobs j on a.JobID = j.JobID
@@ -166,7 +178,8 @@ from Jobs j
 where j.Salary between 60000 and 80000
 
 
----q.12//Find the jobs that have not received any applications.
+---q.12//Find the jobs that have not received any applications.
+
 select JobTitle
 from Jobs j
 left join Applications a on a.JobID=j.JobID
@@ -193,7 +206,8 @@ group by c.CompanyName;
 
 
 ---q.15//List all applicants along with the companies and positions they have applied for, including those
----who have not applied.
+---who have not applied.
+
 select ap.FirstName, ap.LastName, c.CompanyName, j.JobTitle
 from Applicants ap
 left join Applications a on ap.ApplicantID = a.ApplicantID
